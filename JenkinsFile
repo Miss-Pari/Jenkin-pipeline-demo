@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clean workspace and Navigate to the folder'){
+            steps{
+                cleanWs()
+                bat 'copy C:\\\\Users\\\\HP\\\\Desktop\\\\PG\\\\sem3 "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Armstrong-pipeline"'
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'javac Armstrong.java'
+            }
+        }
+        stage('Jar') {
+            steps {
+                bat 'jar cfe myJar.jar Armstrong Armstrong.class'
+            }
+        }
+        stage('Run') {
+            steps {
+                bat 'java -jar myJar.jar'
+            }
+        }
+        stage('Artifact'){
+            steps{
+                archiveArtifacts artifacts: '*.jar', followSymlinks: false
+            }
+        }
+    }
